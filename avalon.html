@@ -11,6 +11,8 @@
 	
     *{ margin:0;padding: 0; }
 
+    .box{ width: 400px;height: 100px;background: #aaa;border:2px dotted red;position: fixed;bottom: 0;right: 0; }
+
 </style>
 </head>
 <body ms-controller="test">
@@ -35,6 +37,18 @@
         </tbody>
     </table>
 
+    <div class="box">
+        <button ms-click="pause">暂停</button>
+        <button ms-click="run">开始</button>
+        <button ms-click="del">清除</button>
+        <br />
+        选择域名类型:
+        <select ms-each-el="domainArray" ms-change="domainType">
+            <option ms-value="{{el}}">{{el}}</option>  
+        </select>
+    </div>
+
+
 
 
 <script type="text/javascript">
@@ -43,47 +57,61 @@
         var model = avalon.define("test",function(vm){
             vm.type = "";
             vm.domain = "";
+            vm.lastName = "com";
             vm.status = "";
             vm.link = "";
             vm.date = "";
             vm.color = "";
             vm.array = [];
             vm.speed = 30;
+            vm.domainArray = ["com","cn","net"];
+
+            vm.str = "111";
             vm.pause = function(){
                 run.aa && clearInterval(run.aa);
             }
             vm.run = function(){
                 run();
             }
+            vm.domainType = function(){
+                vm.lastName = this.value;
+            }
+            vm.del = function(){
+                vm.array = [];
+            }
         });
 
-        var speed= 3000;
+        var speed= 1000,
+            isbusy = true;
 
         function run(){
             arguments.callee.aa = setInterval(function(){
-                var keyword = ["i","e","i","e","i","e",1,2,3,4,5,6,7,8,9,0,"feng","hong","po","peng","you","hu","yun","ling","king","kong","gong","ning","an","ming","min","nin","ding","din","sin","ying","ru","qing","ting","bing","bin","huang","wang","guan","sen","yo","ji","sheng","fa","vo","op"];
-                var val = "";
 
-                for(var i=0; i<2; i++){
-                    val += keyword[Math.floor(Math.random()*(keyword.length-1))];
-                }
-                console.log(val)
-                $.ajax({
-                    type : "GET",
-                    data : {domain : val},
-                    url : "domain.php",
-                    dataType : "json",
-                    success : function(msg){
-                        model.array.push({
-                            type : model.type = msg[0],
-                            domain : model.domain = msg[1],
-                            status : model.status = msg[3],
-                            link : model.link = msg[1],
-                            color : model.color = msg[4],
-                            date : new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate()
-                        })
+                   // isbusy = false;
+                    var keyword = ["i","e","i","e","i","e",1,2,3,4,5,6,7,8,9,0,"feng","hong","po","peng","you","hu","yun","ling","king","kong","gong","ning","an","ming","min","nin","ding","din","sin","ying","ru","qing","ting","bing","bin","huang","wang","guan","sen","yo","ji","sheng","fa","vo","op"];
+                    var val = "";
+                    for(var i=0; i<2; i++){
+                        val += keyword[Math.floor(Math.random()*(keyword.length-1))];
                     }
-                });
+
+                    $.ajax({
+                        type : "GET",
+                        data : { domain : val,type : model.lastName },
+                        url : "domain.php",
+                        dataType : "json",
+                        success : function(msg){
+                            model.array.push({
+                                type : model.type = msg[0],
+                                domain : model.domain = msg[1],
+                                status : model.status = msg[3],
+                                link : model.link = msg[1],
+                                color : model.color = msg[4],
+                                date : new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate()
+                            });
+
+                        }
+                    });
+
             },speed);
         }
         run();
