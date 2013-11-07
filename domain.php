@@ -1,8 +1,6 @@
 <?
 
-	//$soucedata = file_get_contents('http://pandavip.www.net.cn/check/check_ac1.cgi?domain='.$_GET['domain'].'.com');
-//$soucedata = file_get_contents('http://pandavip.www.net.cn/check/check_ac1.cgi?domain='.$_GET['domain'].'.net');
-	$soucedata = file_get_contents('http://pandavip.www.net.cn/check/check_ac1.cgi?domain='.$_GET['domain'].'.cn');
+	$soucedata = file_get_contents('http://pandavip.www.net.cn/check/check_ac1.cgi?domain='.$_GET['domain'].'.'.$_GET['type']);
 
 	$soucedata1 = substr($soucedata,2,-3);
 
@@ -15,6 +13,11 @@
 
 	if($newdata[3] == "Domain name is not available cachehit" || $newdata[3] == "Domain name is not available"){
 		$newdata[3] = "已注册!";
+		$newdata[4] = "red";
+	}
+
+	if(stripos($newdata[3],"Error in response from Server")){
+		$newdata[3] = "请求超时!!!";
 		$newdata[4] = "red";
 	}
 
