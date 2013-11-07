@@ -11,7 +11,12 @@
 		$newdata[4] = "green";
 	}
 
-	if($newdata[3] == "Domain name is not available cachehit" || $newdata[3] == "Domain name is not available"){
+	if($newdata[3] == "Domain name is invalid"){
+		$newdata[3] = "无效的!!!!";
+		$newdata[4] = "red";
+	}
+
+	if($newdata[3] == "Domain name is not available cachehit" || $newdata[3] == "Domain name is not available" || $newdata[3] == "Domain exists" || $newdata[3] == "In Use"){
 		$newdata[3] = "已注册!";
 		$newdata[4] = "red";
 	}
