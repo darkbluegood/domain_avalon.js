@@ -11,12 +11,14 @@
 	
     *{ margin:0;padding: 0; }
 
-    .box{ width: 400px;height: 100px;background: #aaa;border:2px dotted red;position: fixed;bottom: 0;right: 0; }
-
+    .box{ width: 400px;height: 100px;background: #aaa;border:2px dotted red;position: fixed;bottom: 0;right: 5px;font-size: 14px }
+    .textbox{ width: 400px;height: 120px;resize:none; }
+    .box1{ position: fixed;bottom: 120px;right: 5px;font-size: 14px }
+    .box button{ padding:3px; }
+    .p1{ line-height: 20px }
 </style>
 </head>
 <body ms-controller="test">
-
 
     <table cellspadding="0" cellspacing="0" border="1" width="700" align="center">
         <thead>
@@ -37,6 +39,12 @@
         </tbody>
     </table>
 
+    <div class="box1">
+        <p class="p1">请输入关键字:<br />例如:wo,ai,ni或者1,2,3,4,5,6 <br />注意:每个关键字要逗号分开!</p>
+        <textarea name="" class="textbox" ms-duplex="keyword"></textarea><br />
+        域名位数:<input type="text" size="4" ms-duplex="length"><br />
+    </div>
+
     <div class="box">
         <button ms-click="pause">暂停</button>
         <button ms-click="run">开始</button>
@@ -47,9 +55,6 @@
             <option ms-value="{{el}}">{{el}}</option>  
         </select>
     </div>
-
-
-
 
 <script type="text/javascript">
 	
@@ -64,7 +69,9 @@
             vm.color = "";
             vm.array = [];
             vm.speed = 30;
-            vm.domainArray = ["com","cn","net"];
+            vm.domainArray = ["com","cn","net","org","com.cn","name","cc","co","gov.cn","info","mobi","so"];
+            vm.keyword = "1,2,3,4";
+            vm.length = 6;
 
             vm.str = "111";
             vm.pause = function(){
@@ -81,17 +88,14 @@
             }
         });
 
-        var speed= 1000,
-            isbusy = true;
+        var speed= 1000;
 
         function run(){
             arguments.callee.aa = setInterval(function(){
-
-                   // isbusy = false;
-                    var keyword = ["i","e","i","e","i","e",1,2,3,4,5,6,7,8,9,0,"feng","hong","po","peng","you","hu","yun","ling","king","kong","gong","ning","an","ming","min","nin","ding","din","sin","ying","ru","qing","ting","bing","bin","huang","wang","guan","sen","yo","ji","sheng","fa","vo","op"];
+                    var keyword = model.keyword.split(",");
                     var val = "";
-                    for(var i=0; i<2; i++){
-                        val += keyword[Math.floor(Math.random()*(keyword.length-1))];
+                    for(var i=0; i<model.length; i++){
+                        val += keyword[Math.floor(Math.random()*keyword.length)];
                     }
 
                     $.ajax({
